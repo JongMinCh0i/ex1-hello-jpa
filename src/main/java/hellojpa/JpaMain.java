@@ -1,9 +1,16 @@
 package hellojpa;
 
+import org.h2.engine.User;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+
+import java.sql.Date;
+import java.time.LocalDateTime;
+
+import static hellojpa.RoleType.*;
 
 public class JpaMain {
     public static void main(String[] args) {
@@ -15,16 +22,14 @@ public class JpaMain {
         tx.begin();
 
         try {
+            Member member = new Member();
+            member.setId(2L);
+            member.setUsername("B");
+            member.setRoleType(ADMIN);
+            member.setTestLocalDateTime(LocalDateTime.now());
 
-            //영속
-            Member member = em.find(Member.class, 150L);
-            member.setName("AAAAA");
+            em.persist(member);
 
-            // 준 영속성 상태로 전환
-            em.detach(member);
-
-            System.out.println("==================");
-            // 데이터를 변경했는데도 불구 하고 Update 쿼리가 실행되지 않음
             tx.commit();
         } catch (Exception e) {
             tx.rollback();
